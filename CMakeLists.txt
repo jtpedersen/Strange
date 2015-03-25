@@ -10,3 +10,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(test)
+
+
+add_custom_target(docs
+                  COMMAND doxygen
+                  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+		  )
