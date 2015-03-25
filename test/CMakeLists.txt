@@ -8,4 +8,5 @@ ADD_EXECUTABLE(
   testStrangeAttractor
   testStrangeAttractor.cpp
   ${SRCDIR}/StrangeAttractor.cpp
+  ${SRCDIR}/aabb.cpp
   )

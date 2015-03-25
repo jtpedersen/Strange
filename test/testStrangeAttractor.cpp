@@ -2,6 +2,7 @@
 #include "catch.hpp"
 
 #include "StrangeAttractor.h"
+#include "aabb.h"
 
 
 TEST_CASE( "include SA", "[StrangeAttractor]" ) {
@@ -23,4 +24,40 @@ TEST_CASE( "assign SA", "[StrangeAttractor]" ) {
     auto sa = StrangeAttractor::random();
     auto sa2 = sa;
     REQUIRE( sa == sa2);
+}
+
+
+TEST_CASE( "aabb init", "[aabb]") {
+    AABB aabb;
+    REQUIRE( ! aabb.isValid() );
+}
+
+
+TEST_CASE( "aabb grow one", "[aabb]") {
+    AABB aabb;
+    aabb.grow(glm::vec3(0));
+    REQUIRE( aabb.isValid() );
+    REQUIRE( 0 == aabb.volume() );
+}
+
+
+TEST_CASE( "aabb grow more", "[aabb]") {
+    AABB aabb;
+    aabb.grow(glm::vec3(0));
+    aabb.grow(glm::vec3(1.0));
+    REQUIRE( 1.0 == aabb.volume() );
+}
+
+
+TEST_CASE( "aabb grow more and do not count it", "[aabb]") {
+    AABB aabb;
+    aabb.grow(glm::vec3(0));
+    aabb.grow(glm::vec3(1.0));
+
+    // "random" selection
+    aabb.grow(glm::vec3(.1));
+    aabb.grow(glm::vec3(.2));
+    aabb.grow(glm::vec3(.72));
+    
+    REQUIRE( 1.0 == aabb.volume() );
 }
