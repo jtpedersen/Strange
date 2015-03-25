@@ -13,6 +13,7 @@
 #include <memory>
 #include <iostream>
 using namespace std;
+using namespace glm;
 
 
 const int WIDTH  = 888;
@@ -21,40 +22,38 @@ const int HEIGHT = 888;
 SDL_Renderer *renderer = nullptr;
 SDL_Window   *win      = nullptr;
 
-glm::vec3 rotations(0,0,0);
-float scale = 1.0f;
+vec3 rotations(0,0,0);
+float cam_scale = 1.0f;
 
-vector<glm::vec3> points() {
-    auto pts = vector<glm::vec3> {};
+vector<vec3> points() {
+    auto pts = vector<vec3> {};
     for(int i = 0; i < 100; i++)
-	pts.emplace_back(i*.01, i, .001f * i);
+	pts.emplace_back(i*.01, .01 * i, .001f * i);
     return pts;
 }
 
-glm::mat4 camera() {
-    auto model = glm::mat4(1.0);
-    model = model * glm::rotate(rotations[0], glm::vec3(1.0f, 0.0f, 0.0f));
-    model = model * glm::rotate(rotations[1], glm::vec3(0.0f, 1.0f, 0.0f));
-    model = model * glm::rotate(rotations[2], glm::vec3(0.0f, 0.0f, 1.0f));
+mat4 mvp() {
+    auto model = mat4(1.0);
+    model = model * rotate(rotations[0], vec3(1.0f, 0.0f, 0.0f));
+    model = model * rotate(rotations[1], vec3(0.0f, 1.0f, 0.0f));
+    model = model * rotate(rotations[2], vec3(0.0f, 0.0f, 1.0f));
 
-    auto view = glm::lookAt(glm::vec3(0,0,1),
-			    glm::vec3(0.0),
-			    glm::vec3(0,1,0));
+    auto view = lookAt(vec3(0,0,1), vec3(0.0), vec3(0,1,0));
 
-    auto projection = glm::translate(glm::mat4(1.0), glm::vec3(WIDTH/2, HEIGHT/2, 0));
-    projection = glm::scale(projection, glm::vec3(scale));
+    auto projection = translate(mat4(1.0), vec3(WIDTH/2, HEIGHT/2, 0));
+    projection = scale(projection, vec3(cam_scale));
 
     return model * view * projection;
 }
 
-vector<SDL_Point> glm2sdl(const vector<glm::vec3>& pts) {
+vector<SDL_Point> glm2sdl(const vector<vec3>& pts) {
     auto sdlpts = vector<SDL_Point>();
-    const auto cam = camera();
+    const auto cam = mvp();
     for(const auto p : pts) {
-	auto pixel = cam * glm::vec4(p, 1.0);
+	auto pixel = cam * vec4(p, 1.0);
 	auto x = static_cast<int>(pixel.x);
 	auto y = static_cast<int>(pixel.y);
-//	cout << glm::to_string(p) <<  "-> (" << x << ", " << y << ")" << glm::to_string(pixel) << endl;
+//	cout << to_string(p) <<  "-> (" << x << ", " << y << ")" << to_string(pixel) << endl;
 	sdlpts.emplace_back( SDL_Point{x,y});
     }
     return sdlpts;
@@ -65,12 +64,8 @@ void render() {
     SDL_RenderClear(renderer);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); 
     auto sdlpts = glm2sdl(points());
-
-
-    auto fail = SDL_RenderDrawPoints(renderer, sdlpts.data(), sdlpts.size());
-    if (fail) {
+    if (SDL_RenderDrawPoints(renderer, sdlpts.data(), sdlpts.size())) 
 	printf("SDL_RenderDrawPoints failed: %s\n", SDL_GetError());
-    }
 }
 
 int main(int argc, char **argv) {
@@ -97,14 +92,13 @@ int main(int argc, char **argv) {
 	fps = fps * .9 + .1 * (1000.0 / dt);
 	start_time = end_time;
 
-// update texture
 	render();
 
 // check input
 	while (SDL_PollEvent(&e)){
 	    if (e.type == SDL_QUIT || SDLK_q == e.key.keysym.sym) exit(0);
-	    if (SDLK_UP   == e.key.keysym.sym) scale *= 1.05;
-	    if (SDLK_DOWN == e.key.keysym.sym) scale *= 0.95;
+	    if (SDLK_UP   == e.key.keysym.sym) cam_scale *= 1.05;
+	    if (SDLK_DOWN == e.key.keysym.sym) cam_scale *= 0.95;
 	    if (SDLK_w == e.key.keysym.sym) rotations[1] += .1;
 	    if (SDLK_a == e.key.keysym.sym) rotations[1] -= .1;
 	    if (SDLK_s == e.key.keysym.sym) rotations[0] += .1;
