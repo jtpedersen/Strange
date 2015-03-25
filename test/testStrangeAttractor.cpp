@@ -3,13 +3,13 @@
 
 #include "StrangeAttractor.h"
 #include "aabb.h"
+#include "StrangeSearcher.h"
 
 
 TEST_CASE( "include SA", "[StrangeAttractor]" ) {
     auto sa = StrangeAttractor::random();
     REQUIRE( true);
 }
-
 
 TEST_CASE( "reload SA", "[StrangeAttractor]" ) {
     for(unsigned int i = 0; i < 10; i++ ) {
@@ -26,12 +26,10 @@ TEST_CASE( "assign SA", "[StrangeAttractor]" ) {
     REQUIRE( sa == sa2);
 }
 
-
 TEST_CASE( "aabb init", "[aabb]") {
     AABB aabb;
     REQUIRE( ! aabb.isValid() );
 }
-
 
 TEST_CASE( "aabb grow one", "[aabb]") {
     AABB aabb;
@@ -40,14 +38,12 @@ TEST_CASE( "aabb grow one", "[aabb]") {
     REQUIRE( 0 == aabb.volume() );
 }
 
-
 TEST_CASE( "aabb grow more", "[aabb]") {
     AABB aabb;
     aabb.grow(glm::vec3(0));
     aabb.grow(glm::vec3(1.0));
     REQUIRE( 1.0 == aabb.volume() );
 }
-
 
 TEST_CASE( "aabb grow more and do not count it", "[aabb]") {
     AABB aabb;
@@ -60,4 +56,11 @@ TEST_CASE( "aabb grow more and do not count it", "[aabb]") {
     aabb.grow(glm::vec3(.72));
     
     REQUIRE( 1.0 == aabb.volume() );
+}
+
+TEST_CASE( "startting the search", "[StrangeSearcher]") {
+    StrangeSearcher ss;
+    auto rater = std::make_shared<LowStandards>();
+    ss.setRater(rater);
+    ss.find();
 }
