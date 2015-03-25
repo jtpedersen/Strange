@@ -93,3 +93,20 @@ StrangeAttractor StrangeAttractor::load(std::string filename) {
     return res;
 }
 
+static bool fuzzycmp(float a, float b, float tolerance = 1e-5) {
+    return std::abs(a-b) < tolerance;
+}
+
+bool StrangeAttractor::operator==(const StrangeAttractor& lhs) const {
+    const StrangeAttractor& rhs = *this;
+    for(unsigned int i = 0; i < rhs.x_coeffs.size(); i++)
+	if (!fuzzycmp(rhs.x_coeffs[i], lhs.x_coeffs[i]))
+	    return false;
+    for(unsigned int i = 0; i < rhs.y_coeffs.size(); i++)
+	if (!fuzzycmp(rhs.y_coeffs[i], lhs.y_coeffs[i]))
+	    return false;
+    for(unsigned int i = 0; i < rhs.z_coeffs.size(); i++)
+	if (!fuzzycmp(rhs.z_coeffs[i], lhs.z_coeffs[i]))
+	    return false;
+    return true;
+}
