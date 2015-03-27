@@ -2,9 +2,6 @@
 #include "Util.h"
 
 #include <stdexcept>
-#include <glm/gtx/compatibility.hpp> //glm::isfinite
-
-	
 
 StrangeGenerator::StrangeGenerator(const StrangeAttractor& _sa)
     : sa(_sa) {
@@ -40,9 +37,7 @@ glm::vec3 StrangeGenerator::warmup(const glm::vec3& p, size_t count) const {
     glm::vec3 it(p);
     for(size_t i = 0; i < count; i++) {
 	it = sa.step(it);
-	auto test = glm::isfinite(it);
-	if ( ! (test.x && test.y && test.z) )
-	    throw  std::range_error("flew outside the");
+	util::throwIfNotFinite(it);
     }
     return it;
 }

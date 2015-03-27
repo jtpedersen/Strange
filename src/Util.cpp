@@ -20,4 +20,10 @@ namespace util {
 	std::cout << msg << std::endl;
     }
 
+    void throwIfNotFinite(const glm::vec3& p) {
+	auto test = glm::isfinite(p);
+	if ( ! (test.x && test.y && test.z) )
+	    throw  std::range_error("point is not finite");
+    }
+
 };

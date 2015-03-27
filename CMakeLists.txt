@@ -12,7 +12,12 @@ ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(test)
 
 
-add_custom_target(docs
-                  COMMAND doxygen
-                  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-		  )
+ADD_CUSTOM_TARGET(docs
+  COMMAND doxygen
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )
+
+ADD_CUSTOM_TARGET(tags
+  COMMAND global --update
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )

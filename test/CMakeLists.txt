@@ -12,4 +12,5 @@ ADD_EXECUTABLE(
   ${SRCDIR}/StrangeSearcher.cpp
   ${SRCDIR}/StrangeGenerator.cpp
   ${SRCDIR}/Util.cpp
+  ${SRCDIR}/Rater.cpp
   )

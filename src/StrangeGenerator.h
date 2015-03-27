@@ -1,9 +1,10 @@
 #ifndef STRANGEGENERATOR_H_
 #define STRANGEGENERATOR_H_
-#include <vector>
-#include <glm/vec3.hpp>
 
 #include "StrangeAttractor.h"
+
+#include <vector>
+#include <glm/vec3.hpp>
 
 /**
  * \brief A class reposonsible for generating a series of points
@@ -18,11 +19,11 @@ public:
     ///Step the attractor through its trajectory throw if point is out of bounds return point 
     glm::vec3 warmup(const glm::vec3& p, size_t count = 1000) const;
     /// Assuming that sa is an  Attractor find a point on it, using at most luck tries
-    glm::vec3 startPoint(size_t luck) const;
+    glm::vec3 startPoint(size_t luck = 13) const;
 
 private:
     /// the sa that this generator creates point from
-    const StrangeAttractor& sa;
+    const StrangeAttractor sa;
 };
 
 #endif /* !STRANGEGENERATOR_H_ */

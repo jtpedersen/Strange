@@ -5,6 +5,7 @@
 #include "aabb.h"
 #include "StrangeSearcher.h"
 #include "StrangeGenerator.h"
+#include "Rater.h"
 
 
 TEST_CASE( "include SA", "[StrangeAttractor]" ) {
@@ -51,7 +52,7 @@ TEST_CASE( "aabb grow more and do not count it", "[aabb]") {
     aabb.grow(glm::vec3(0));
     aabb.grow(glm::vec3(1.0));
 
-    // "random" selection
+// "random" selection
     aabb.grow(glm::vec3(.1));
     aabb.grow(glm::vec3(.2));
     aabb.grow(glm::vec3(.72));
@@ -59,19 +60,26 @@ TEST_CASE( "aabb grow more and do not count it", "[aabb]") {
     REQUIRE( 1.0 == aabb.volume() );
 }
 
-TEST_CASE( "startting the search", "[StrangeSearcher]") {
+TEST_CASE( "starting the search", "[StrangeSearcher]") {
     StrangeSearcher ss;
     auto rater = std::make_shared<LowStandards>();
     ss.setRater(rater);
     ss.find();
 }
 
-TEST_CASE( "generate", "[strange generator]") {
-    auto sa = StrangeAttractor::random();
-    auto sg = StrangeGenerator(sa);
-
-    auto ls = sg.generate(100);
-    REQUIRE( 100 == ls.size());
+TEST_CASE( "Volumetric search", "[StrangeSearcher]") {
+    StrangeSearcher ss;
+    auto rater = std::make_shared<VolumeRater>(.1);
+    ss.setRater(rater);
+    auto rate = rater->rate(&ss);
+    REQUIRE( rate < 0.0);
+    REQUIRE(ss.find(1000));
 }
 
+// TEST_CASE( "generate", "[strange generator]") {
+//     auto sa = StrangeAttractor::random();
+//     auto sg = StrangeGenerator(sa);
 
+//     auto ls = sg.generate(100);
+//     REQUIRE( 100 == ls.size());
+// }
