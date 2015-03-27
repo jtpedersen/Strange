@@ -1,6 +1,7 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
+#define GLM_FORCE_RADIANS
 #include <glm/vec3.hpp>
 #include <glm/gtx/compatibility.hpp> //glm::isfinite
 #include <stdexcept>

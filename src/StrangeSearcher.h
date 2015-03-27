@@ -23,7 +23,8 @@ public:
     bool find(int maxAttempts = 10);
     /// access the AABB for the current attractor
     const AABB& getAABB() const;
-    
+    /// return the current SA
+    const StrangeAttractor& getSA() const;
 private:
     /// Start at p and step through n points and gather metrics
     void measure(const glm::vec3& p, int n = 100000);

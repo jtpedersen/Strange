@@ -36,7 +36,10 @@ void StrangeSearcher::measure(const glm::vec3& p, int n) {
     }
 }
 
-
 const AABB& StrangeSearcher::getAABB() const {
     return aabb;
+}
+
+const StrangeAttractor& StrangeSearcher::getSA() const {
+    return sa;
 }

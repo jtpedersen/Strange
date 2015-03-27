@@ -7,10 +7,20 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(
   testStrangeAttractor
   testStrangeAttractor.cpp
-  ${SRCDIR}/StrangeAttractor.cpp
-  ${SRCDIR}/aabb.cpp
-  ${SRCDIR}/StrangeSearcher.cpp
-  ${SRCDIR}/StrangeGenerator.cpp
-  ${SRCDIR}/Util.cpp
-  ${SRCDIR}/Rater.cpp
+  )
+
+TARGET_LINK_LIBRARIES(
+  testStrangeAttractor
+  SA
+  )
+
+
+ADD_EXECUTABLE(
+  perfOne
+  perfOne.cpp
+  )
+
+TARGET_LINK_LIBRARIES(
+  perfOne
+  SA
   )

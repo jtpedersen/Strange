@@ -1,9 +1,23 @@
-ADD_EXECUTABLE(
+ADD_LIBRARY (
   SA
-  main.cpp
+  STATIC
   StrangeAttractor.cpp
+  aabb.cpp
+  StrangeSearcher.cpp
+  StrangeGenerator.cpp
   Util.cpp
+  Rater.cpp
+)
+
+ADD_EXECUTABLE(
+  main
+  main.cpp
   )
+
+TARGET_LINK_LIBRARIES(
+  main
+  SA
+)
 
 
 
