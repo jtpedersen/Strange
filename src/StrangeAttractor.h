@@ -9,14 +9,17 @@
 
 class StrangeAttractor {
 public:
-    glm::vec3 step(const glm::vec3& p) const;
     /// just random coefficients
     static StrangeAttractor random();
+
+    /// move point on trajectory
+    glm::vec3 step(const glm::vec3& p) const;
+
     /// save as simple dump of coefficients
     static StrangeAttractor load(std::string filename);
     void save(std::string filename) const;
 
-bool operator==(const StrangeAttractor& lhs) const;
+    bool operator==(const StrangeAttractor& lhs) const;
 private:
     std::array<float, 10> x_coeffs;
     std::array<float, 10> y_coeffs;

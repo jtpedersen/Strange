@@ -2,6 +2,7 @@ ADD_EXECUTABLE(
   SA
   main.cpp
   StrangeAttractor.cpp
+  Util.cpp
   )
 
 

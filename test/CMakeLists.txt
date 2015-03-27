@@ -10,4 +10,6 @@ ADD_EXECUTABLE(
   ${SRCDIR}/StrangeAttractor.cpp
   ${SRCDIR}/aabb.cpp
   ${SRCDIR}/StrangeSearcher.cpp
+  ${SRCDIR}/StrangeGenerator.cpp
+  ${SRCDIR}/Util.cpp
   )

@@ -1,8 +1,23 @@
 #include "StrangeAttractor.h"
+#include "Util.h"
 
 #include <random>
 #include <fstream>
 
+
+StrangeAttractor StrangeAttractor::random() {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    static std::uniform_real_distribution<> coeff_dis(-1.2, 1.2);
+    StrangeAttractor res;
+    for(auto& c: res.x_coeffs)
+	c = coeff_dis(gen);
+    for(auto& c: res.y_coeffs)
+	c = coeff_dis(gen);
+    for(auto& c: res.z_coeffs)
+	c = coeff_dis(gen);
+    return res;
+}
 
 glm::vec3 StrangeAttractor::step(const glm::vec3& p) const {
     glm::vec3 next;
@@ -49,25 +64,9 @@ glm::vec3 StrangeAttractor::step(const glm::vec3& p) const {
     next.z += z_coeffs[8]*p.x*p.z;
     next.z += z_coeffs[9]*p.y*p.z;
 
-    assert(std::isfinite(next.x));
-    assert(std::isfinite(next.y));
-    assert(std::isfinite(next.z));
     return next;
 }
 
-StrangeAttractor StrangeAttractor::random() {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_real_distribution<> coeff_dis(-1.2, 1.2);
-    StrangeAttractor res;
-    for(auto& c: res.x_coeffs)
-	c = coeff_dis(gen);
-    for(auto& c: res.y_coeffs)
-	c = coeff_dis(gen);
-    for(auto& c: res.z_coeffs)
-	c = coeff_dis(gen);
-    return res;
-}
 
 void StrangeAttractor::save(std::string filename) const {
     std::ofstream ofs(filename, std::ios::out | std::ofstream::binary);
@@ -93,20 +92,17 @@ StrangeAttractor StrangeAttractor::load(std::string filename) {
     return res;
 }
 
-static bool fuzzycmp(float a, float b, float tolerance = 1e-5) {
-    return std::abs(a-b) < tolerance;
-}
 
 bool StrangeAttractor::operator==(const StrangeAttractor& lhs) const {
     const StrangeAttractor& rhs = *this;
     for(unsigned int i = 0; i < rhs.x_coeffs.size(); i++)
-	if (!fuzzycmp(rhs.x_coeffs[i], lhs.x_coeffs[i]))
+	if (!util::fuzzycmp(rhs.x_coeffs[i], lhs.x_coeffs[i]))
 	    return false;
     for(unsigned int i = 0; i < rhs.y_coeffs.size(); i++)
-	if (!fuzzycmp(rhs.y_coeffs[i], lhs.y_coeffs[i]))
+	if (!util::fuzzycmp(rhs.y_coeffs[i], lhs.y_coeffs[i]))
 	    return false;
     for(unsigned int i = 0; i < rhs.z_coeffs.size(); i++)
-	if (!fuzzycmp(rhs.z_coeffs[i], lhs.z_coeffs[i]))
+	if (!util::fuzzycmp(rhs.z_coeffs[i], lhs.z_coeffs[i]))
 	    return false;
     return true;
 }

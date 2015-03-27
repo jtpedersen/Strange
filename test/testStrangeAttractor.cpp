@@ -4,6 +4,7 @@
 #include "StrangeAttractor.h"
 #include "aabb.h"
 #include "StrangeSearcher.h"
+#include "StrangeGenerator.h"
 
 
 TEST_CASE( "include SA", "[StrangeAttractor]" ) {
@@ -64,3 +65,13 @@ TEST_CASE( "startting the search", "[StrangeSearcher]") {
     ss.setRater(rater);
     ss.find();
 }
+
+TEST_CASE( "generate", "[strange generator]") {
+    auto sa = StrangeAttractor::random();
+    auto sg = StrangeGenerator(sa);
+
+    auto ls = sg.generate(100);
+    REQUIRE( 100 == ls.size());
+}
+
+
