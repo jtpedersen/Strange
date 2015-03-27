@@ -16,6 +16,7 @@ class StrangeSearcher;
  */
 class Rater {
 public:
+    /// return a rate for the current StrangAttractor in the StrangeAttractor
     virtual float rate(const StrangeSearcher* ss) = 0;
 };
 
@@ -31,12 +32,17 @@ class LowStandards : public Rater {
 class StrangeSearcher {
     friend class Rater;
 public:
+    /// Inject a strategy for determinig if an attractor is accecptable
     void setRater(std::shared_ptr<Rater> rater);
+    /// Try random attractors until there is deemed good enouhg
     void find(int maxAttempts = 10);
     
 private:
+    /// Current sa used for 
     StrangeAttractor sa;
+    /// The aabb where the sa has its trajectory
     AABB aabb;
+    /// The rater used 
     std::shared_ptr<Rater> rater;
 };
 

@@ -5,16 +5,23 @@
 #define GLM_SWIZZLE 
 #include <glm/vec3.hpp>
 
-
+/**
+ * \brief A basic unoptimized Axis Aligned Bounding Box
+ */
 class AABB {
 public:
     AABB();
+    /// Extend to aabb include p
     void grow(const glm::vec3& p);
-
+    /// Is a valid box 
     bool isValid() const;
-float volume() const;
-    
-    glm::vec3 low, high;
+    /// Volume of the box
+    float volume() const;
+
+    /// the minimal corner for the aabb
+    glm::vec3 low;
+    /// the maximal corner for the aabb
+    glm::vec3 high;     
 };
 
 #endif /* !AABB_H_ */

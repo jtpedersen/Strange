@@ -7,6 +7,13 @@
 #include <string>
 #include <array>
 
+/**
+ * \brief A StrangeAttractor
+ * A random sample can be staticly constructoed a
+ * There is a step funciton which is threadsage and could be optimized
+ * can save and load
+ * \todo extend to more than a quadratic map
+ */
 class StrangeAttractor {
 public:
     /// just random coefficients
@@ -17,13 +24,17 @@ public:
 
     /// save as simple dump of coefficients
     static StrangeAttractor load(std::string filename);
+    /// load a dump of the coefficents
     void save(std::string filename) const;
-
+    /// equal when all coefficents are equal within epsilon
     bool operator==(const StrangeAttractor& lhs) const;
 private:
-    std::array<float, 10> x_coeffs;
-    std::array<float, 10> y_coeffs;
-    std::array<float, 10> z_coeffs;
+    /// x_coeffs for qaudratic map
+    std::array<float, 10> x_coeffs; 
+    /// y_coeffs for qaudratic map
+    std::array<float, 10> y_coeffs; 
+    /// z_coeffs for qaudratic map
+    std::array<float, 10> z_coeffs; 
 };
 
 
