@@ -30,3 +30,7 @@ float AABB::volume() const {
 	(high.z - low.z)
 	);
 }
+
+glm::vec3 AABB::center() const {
+    return .5f * (low + high);
+}

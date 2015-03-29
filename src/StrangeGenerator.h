@@ -12,8 +12,12 @@
  */
 class StrangeGenerator {
 public:
+    /// Construct a generator 
+    StrangeGenerator();
     /// Construct a generator with the given sa
     StrangeGenerator(const StrangeAttractor& _sa);
+    /// Set the attractor to generate points from
+    void setSA(const StrangeAttractor& _sa);
     ///Generate a series of points as vector
     std::vector<glm::vec3> generate(size_t count);
     ///Step the attractor through its trajectory throw if point is out of bounds return point 
@@ -23,7 +27,7 @@ public:
 
 private:
     /// the sa that this generator creates point from
-    const StrangeAttractor sa;
+    StrangeAttractor sa;
     /// Current possition
     glm::vec3 pos;
 };

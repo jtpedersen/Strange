@@ -17,6 +17,8 @@ public:
     bool isValid() const;
     /// Volume of the box
     float volume() const;
+    /// Return the cneter og the bounding box
+    glm::vec3 center() const;
 
     /// the minimal corner for the aabb
     glm::vec3 low;

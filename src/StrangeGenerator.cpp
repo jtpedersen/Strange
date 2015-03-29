@@ -3,9 +3,16 @@
 
 #include <stdexcept>
 
+StrangeGenerator::StrangeGenerator() {
+
+}
+
 StrangeGenerator::StrangeGenerator(const StrangeAttractor& _sa)
     : sa(_sa) {
+}
 
+void StrangeGenerator::setSA(const StrangeAttractor& sa) {
+    this->sa = sa;
 }
 
 std::vector<glm::vec3> StrangeGenerator::generate(size_t count) {

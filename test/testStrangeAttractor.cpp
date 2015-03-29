@@ -6,6 +6,7 @@
 #include "StrangeSearcher.h"
 #include "StrangeGenerator.h"
 #include "Rater.h"
+#include "Util.h"
 
 
 TEST_CASE( "compare", "[StrangeAttractor]" ) {
@@ -61,6 +62,25 @@ TEST_CASE( "aabb grow more and do not count it", "[aabb]") {
     REQUIRE( 1.0 == aabb.volume() );
 }
 
+
+TEST_CASE( "aabb has a center", "[aabb]") {
+    AABB aabb;
+    aabb.grow(glm::vec3(0));
+    auto dist = glm::distance(aabb.center(), glm::vec3(0));
+    REQUIRE(util::fuzzycmp(dist, 0));
+}
+
+TEST_CASE( "aabb has right center", "[aabb]") {
+    AABB aabb;
+    aabb.grow(glm::vec3(0));
+    aabb.grow(glm::vec3(1));
+    auto dist = glm::distance(aabb.center(), glm::vec3(.5));
+    REQUIRE(util::fuzzycmp(dist, 0));
+    
+}
+
+
+
 TEST_CASE( "starting the search", "[StrangeSearcher]") {
     StrangeSearcher ss;
     auto rater = std::make_shared<LowStandards>();
@@ -85,4 +105,16 @@ TEST_CASE( "generate", "[strange generator]") {
     auto sg = StrangeGenerator(ss.getSA());
     auto ls = sg.generate(100);
     REQUIRE( 100 == ls.size());
+}
+
+
+TEST_CASE( "generator Setting a sa", "[strange generator]") {
+    auto sg = StrangeGenerator();
+    auto sa = StrangeAttractor::random();
+
+    sg.setSA(sa);
+
+    // it is TDD to put it here when deving - yet the case is trivial and what whould in reality tests?
+    // and 100% coverage is nice - how ?
+
 }

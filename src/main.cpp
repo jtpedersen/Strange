@@ -1,5 +1,12 @@
 #include <SDL2/SDL.h>
 
+#include "StrangeAttractor.h"
+#include "StrangeSearcher.h"
+#include "StrangeGenerator.h"
+#include "Rater.h"
+
+
+
 #define GLM_FORCE_RADIANS
 #include <glm/vec3.hpp>// glm::vec3
 #include <glm/vec4.hpp>// glm::vec4
@@ -23,27 +30,33 @@ SDL_Renderer *renderer = nullptr;
 SDL_Window   *win      = nullptr;
 
 vec3 rotations(0,0,0);
-float cam_scale = 1.0f;
+float cam_scale = 130.0f;
 
-vector<vec3> points() {
-    auto pts = vector<vec3> {};
-    for(int i = 0; i < 100; i++)
-	pts.emplace_back(i*.01, .01 * i, .001f * i);
-    return pts;
+auto ss = StrangeSearcher();
+auto strangeGenerator = StrangeGenerator();
+
+void nextAttractor() {
+    ss.find(1337);
+    strangeGenerator.setSA(ss.getSA());
 }
 
 mat4 mvp() {
     auto model = mat4(1.0);
+
+    vec3 center = ss.getAABB().center();
+    
     model = model * rotate(rotations[0], vec3(1.0f, 0.0f, 0.0f));
     model = model * rotate(rotations[1], vec3(0.0f, 1.0f, 0.0f));
     model = model * rotate(rotations[2], vec3(0.0f, 0.0f, 1.0f));
+
+    model = translate(model, -center);
 
     auto view = lookAt(vec3(0,0,1), vec3(0.0), vec3(0,1,0));
 
     auto projection = translate(mat4(1.0), vec3(WIDTH/2, HEIGHT/2, 0));
     projection = scale(projection, vec3(cam_scale));
 
-    return model * view * projection;
+    return  projection * view * model;
 }
 
 vector<SDL_Point> glm2sdl(const vector<vec3>& pts) {
@@ -62,10 +75,24 @@ vector<SDL_Point> glm2sdl(const vector<vec3>& pts) {
 void render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); 
-    auto sdlpts = glm2sdl(points());
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    try {
+	strangeGenerator.startPoint(1000);
+	strangeGenerator.warmup();
+    } catch (const std::runtime_error& e) {
+	nextAttractor();
+	return;
+    }
+
+    auto sdlpts = glm2sdl(strangeGenerator.generate(100000));
     if (SDL_RenderDrawPoints(renderer, sdlpts.data(), sdlpts.size())) 
 	printf("SDL_RenderDrawPoints failed: %s\n", SDL_GetError());
+}
+
+void init() {
+    auto rater = std::make_shared<VolumeRater>(.1);
+    ss.setRater(rater);
+    nextAttractor();
 }
 
 int main(int argc, char **argv) {
@@ -78,6 +105,8 @@ int main(int argc, char **argv) {
     float fps = 10.0;
     auto start_time = SDL_GetTicks();
 
+    init();
+    
     while(1) {
 
 // calc FPS
@@ -105,6 +134,9 @@ int main(int argc, char **argv) {
 	    if (SDLK_d == e.key.keysym.sym) rotations[0] -= .1;
 	    if (SDLK_r == e.key.keysym.sym) rotations[2] += .1;
 	    if (SDLK_e == e.key.keysym.sym) rotations[2] -= .1;
+	    if (SDLK_n == e.key.keysym.sym) nextAttractor();
+
+
 	}
 
 // display
