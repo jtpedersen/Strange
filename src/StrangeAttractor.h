@@ -28,6 +28,9 @@ public:
     void save(std::string filename) const;
     /// equal when all coefficents are equal within epsilon
     bool operator==(const StrangeAttractor& lhs) const;
+    /// ! == 
+    bool operator!=(const StrangeAttractor& lhs) const;
+
 private:
     /// x_coeffs for qaudratic map
     std::array<float, 10> x_coeffs; 

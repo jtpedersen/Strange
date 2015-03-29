@@ -1,6 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(StrangVanilla)
 
+SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+MESSAGE("CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 
@@ -9,20 +11,34 @@ SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
-SET(CMAKE_CXX_FLAGS_DEBUG "-fsanitize=address -fno-omit-frame-pointer -g")
+SET(CMAKE_CXX_FLAGS_DEBUG "-Wall -pedantic -Werror ")
 SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -flto")
 
+OPTION(ASAN "Use adresss saniizer" OFF)
+IF (ASAN)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer -g")
+ENDIF()
 
+OPTION(GCOV "Instrument code for coverage analysis" OFF)
+IF(GCOV)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+  INCLUDE(coverage)
+ENDIF()
+
+  
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(test)
 
 
-ADD_CUSTOM_TARGET(docs
+ADD_CUSTOM_TARGET(
+  docs
   COMMAND doxygen
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
 
-ADD_CUSTOM_TARGET(tags
+ADD_CUSTOM_TARGET(
+  tags
   COMMAND global --update
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
+

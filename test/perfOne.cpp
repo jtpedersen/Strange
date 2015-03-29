@@ -18,7 +18,6 @@ int main(int argc, char** argv) {
 	std::cout << "ping" << std::endl;
     
     std::cout << "********************************************************************************" << std::endl;
-    auto sa = ss.getSA();
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();

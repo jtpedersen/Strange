@@ -16,6 +16,6 @@ namespace util {
     void message(const std::string& msg);
     /// nans and inf are not velcome
     void throwIfNotFinite(const glm::vec3& p);
-};
+}
 
 #endif /* !UTIL_H_ */

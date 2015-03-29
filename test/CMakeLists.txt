@@ -14,6 +14,11 @@ TARGET_LINK_LIBRARIES(
   SA
   )
 
+SETUP_TARGET_FOR_COVERAGE(
+  basicCoverage
+  testStrangeAttractor
+  coverage)
+
 
 ADD_EXECUTABLE(
   perfOne

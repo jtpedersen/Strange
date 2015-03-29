@@ -26,4 +26,4 @@ namespace util {
 	    throw  std::range_error("point is not finite");
     }
 
-};
+}

@@ -106,3 +106,7 @@ bool StrangeAttractor::operator==(const StrangeAttractor& lhs) const {
 	    return false;
     return true;
 }
+
+bool StrangeAttractor::operator!=(const StrangeAttractor& lhs) const {
+    return ! (*this == lhs);
+}

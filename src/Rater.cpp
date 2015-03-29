@@ -9,7 +9,7 @@ float LowStandards::rate(const StrangeSearcher* ss) {
 VolumeRater::VolumeRater(float thresshold)
     : thresshold(thresshold) {
 
-};
+}
 
 float VolumeRater::rate(const StrangeSearcher* ss) {
     auto aabb = ss->getAABB();

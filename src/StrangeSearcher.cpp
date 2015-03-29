@@ -6,9 +6,8 @@
 void StrangeSearcher::setRater(std::shared_ptr<Rater> rater){
     this->rater = rater;
 }
-bool StrangeSearcher::find(int maxAttempts){
+bool StrangeSearcher::find(unsigned int maxAttempts){
     // generate
-    int attempts = 0;
     for(unsigned int attempt = 0; attempt < maxAttempts; attempt++) {
 	sa = StrangeAttractor::random();
 	aabb = AABB();
@@ -27,7 +26,7 @@ bool StrangeSearcher::find(int maxAttempts){
     return false;
 }
 
-void StrangeSearcher::measure(const glm::vec3& p, int n) {
+void StrangeSearcher::measure(const glm::vec3& p, unsigned int n) {
     glm::vec3 it(p);
     for(size_t i = 0; i < n ; i++) {
 	aabb.grow(it);

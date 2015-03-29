@@ -8,9 +8,10 @@
 #include "Rater.h"
 
 
-TEST_CASE( "include SA", "[StrangeAttractor]" ) {
-    auto sa = StrangeAttractor::random();
-    REQUIRE( true);
+TEST_CASE( "compare", "[StrangeAttractor]" ) {
+    auto sa1 = StrangeAttractor::random();
+    auto sa2 = StrangeAttractor::random();
+    REQUIRE( sa1 != sa2);
 }
 
 TEST_CASE( "reload SA", "[StrangeAttractor]" ) {
@@ -64,7 +65,7 @@ TEST_CASE( "starting the search", "[StrangeSearcher]") {
     StrangeSearcher ss;
     auto rater = std::make_shared<LowStandards>();
     ss.setRater(rater);
-    ss.find();
+    ss.find(10);
 }
 
 TEST_CASE( "Volumetric search", "[StrangeSearcher]") {
@@ -76,10 +77,12 @@ TEST_CASE( "Volumetric search", "[StrangeSearcher]") {
     REQUIRE(ss.find(1000));
 }
 
-// TEST_CASE( "generate", "[strange generator]") {
-//     auto sa = StrangeAttractor::random();
-//     auto sg = StrangeGenerator(sa);
-
-//     auto ls = sg.generate(100);
-//     REQUIRE( 100 == ls.size());
-// }
+TEST_CASE( "generate", "[strange generator]") {
+    StrangeSearcher ss;
+    auto rater = std::make_shared<VolumeRater>(.1);
+    ss.setRater(rater);
+    ss.find(1000);
+    auto sg = StrangeGenerator(ss.getSA());
+    auto ls = sg.generate(100);
+    REQUIRE( 100 == ls.size());
+}

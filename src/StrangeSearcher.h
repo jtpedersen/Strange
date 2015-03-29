@@ -20,14 +20,14 @@ public:
     /// Inject a strategy for determinig if an attractor is accecptable
     void setRater(std::shared_ptr<Rater> rater);
     /// Try random attractors until there is deemed good enough return value indicates success
-    bool find(int maxAttempts = 10);
+    bool find(unsigned int maxAttempts = 10);
     /// access the AABB for the current attractor
     const AABB& getAABB() const;
     /// return the current SA
     const StrangeAttractor& getSA() const;
 private:
     /// Start at p and step through n points and gather metrics
-    void measure(const glm::vec3& p, int n = 100000);
+    void measure(const glm::vec3& p, unsigned int n = 100000);
     /// Current sa used for 
     StrangeAttractor sa;
     /// The aabb where the sa has its trajectory
